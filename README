@@ -1,1 +1,1 @@
-eliminate the "end of endline" warning on linux when compile by gcc or g++
+eliminate the "end of endline" warning on linux when compiled programs by gcc or g++
