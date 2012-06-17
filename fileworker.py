@@ -1,7 +1,7 @@
 import os
 
 class FileWorker:
-    def __init__(self, path=os.getcwd(), suffixs="h,c,hpp,cpp,proto,py", recursive=True):
+    def __init__(self, path=os.getcwd(), suffixs="h,c,hpp,cpp,inl", recursive=True):
         self.SetPath(path)
         self.SetSuffixs(suffixs)
         self.SetRecursive(recursive)
@@ -46,7 +46,8 @@ class FileWorker:
 
     def __WorkFile(self, filename, job):
         assert(os.path.isfile(filename))
-        job.Process(filename)
+        if self.__CheckSuffix(filename):
+            job.Process(filename)
 
     def __CheckSuffix(self, filename):
         if self.__ignoresuffix:

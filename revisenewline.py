@@ -7,21 +7,14 @@ import fileworker
 
 def revisefileend(filename, end):
     if not checkfileend(filename, end):
-        f = open(filename, "a+")
+        f = open(filename, "a")
         f.write(end)
         f.close()
+        print("    revised!")
 
 def checkfileend(filename, end):
     lines = reverseread(filename, 2)
-    linecount = len(lines)
-    if linecount > 0:
-        lastline = lines[-1]
-        if lastline.endswith(end):
-            return True
-        elif linecount > 1 and lastline == "":
-            # last line is empty, that means file end of os.linesep
-            return os.linesep.endswith(end)
-    return False
+    return len(lines) > 0 and lines[-1].endswith(end)
 
 def reverseread(filename, linecount = 1, stepcount = 82):
     f = codecs.open(filename, "r", "utf-8", "ignore")
@@ -33,7 +26,9 @@ def reverseread(filename, linecount = 1, stepcount = 82):
         f.seek(bytecount - readcount, 0)
         chunk = f.read(readcount)
         curlines = chunk.split(os.linesep)
-        if len(lines) > 0 and len(curlines) > 0:
+        if not lines:
+            lines = curlines
+        elif len(lines) > 0 and len(curlines) > 0:
             # last read may truncate 'os.linesep', we merge it here
             mergelines = (curlines[-1] + lines[0]).split()
             lines = curlines[0:-1] + mergelines + lines[1:]
